@@ -3,12 +3,11 @@ BUNDLE = $(APP).app
 
 build:
 	mkdir -p $(BUNDLE)/Contents/MacOS
-	clang -framework AppKit -o $(BUNDLE)/Contents/MacOS/$(APP) main.m AppDelegate.m
+	clang -framework CoreGraphics -framework CoreFoundation -o $(BUNDLE)/Contents/MacOS/$(APP) main.c
 	cp Info.plist $(BUNDLE)/Contents/Info.plist
 
 run: build
-	open $(BUNDLE)
+	./$(BUNDLE)/Contents/MacOS/$(APP)
 
 clean:
 	rm -rf $(BUNDLE)
-	p
