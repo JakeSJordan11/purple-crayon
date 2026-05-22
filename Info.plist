@@ -12,5 +12,7 @@
     <string>NSApplication</string>
     <key>NSMainNibFile</key>
     <string></string>
+    <key>LSUIElement</key>
+    <true/>
 </dict>
 </plist>
