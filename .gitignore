@@ -1,2 +1,8 @@
+# Build
 PurpleCrayon.app
+
+# Front End
+node_modules
+
+# macOS
 .DS_Store

@@ -1,0 +1,27 @@
+{
+  "makefile.launchConfigurations": [
+    {
+      "cwd": "/Users/jake/Development/purple-crayon/PurpleCrayon.app/Contents/MacOS",
+      "binaryPath": "/Users/jake/Development/purple-crayon/PurpleCrayon.app/Contents/MacOS/PurpleCrayon",
+      "binaryArgs": []
+    }
+  ],
+  "makefile.configureOnOpen": false,
+    "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "files.associations": {
+    "pc_run_loop_start.h": "c",
+    "pc_event_tap.h": "c",
+    "pc_run_loop.h": "c",
+    "PCClickablePanel.h": "objective-c",
+    "PCClickableWebView.h": "objective-c",
+    "PCPanel.h": "objective-c"
+  },
+}

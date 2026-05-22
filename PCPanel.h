@@ -7,5 +7,6 @@
 - (void)hide;
 - (void)toggle;
 - (void)registerForToggleNotification;
+void PCRunLoopStart(void);
 
 @end

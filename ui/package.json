@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "build": "node esbuild.config.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.0"
+  },
+  "dependencies": {
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  }
+}
