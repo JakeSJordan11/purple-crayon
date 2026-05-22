@@ -20,6 +20,8 @@ CGEventRef eventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef eve
             NULL,
             NULL,
             true);
+
+        return NULL;
     }
 
     return event;
