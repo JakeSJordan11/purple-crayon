@@ -1,6 +1,6 @@
-#import "PCClickablePanel.h"
+#import "ClickablePanel.h"
 
-@implementation PCClickablePanel
+@implementation ClickablePanel
 - (BOOL)canBecomeKeyWindow { return YES; }
 - (BOOL)canBecomeMainWindow { return NO; }
 - (BOOL)acceptsFirstMouse:(NSEvent *)event { return YES; }

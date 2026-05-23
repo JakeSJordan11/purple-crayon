@@ -1,18 +1,18 @@
-#import "PCPanel.h"
-#import "PCClickablePanel.h"
-#import "PCClickableWebView.h"
+#import "ClickablePanel.h"
+#import "ClickableWebView.h"
+#import "Panel.h"
 
-static void PCPanelToggleCallback(CFNotificationCenterRef center, void *observer, CFNotificationName name, const void *object, CFDictionaryRef userInfo) {
-    PCPanel *panel = (__bridge PCPanel *)observer;
+static void PanelToggleCallback(CFNotificationCenterRef center, void *observer, CFNotificationName name, const void *object, CFDictionaryRef userInfo) {
+    Panel *panel = (__bridge Panel *)observer;
     [panel toggle];
 }
 
-@implementation PCPanel {
+@implementation Panel {
     NSPanel *_panel;
     WKWebView *_webView;
 }
 
-void PCRunLoopStart(void) {
+void RunLoopStart(void) {
     [NSApp run];
 }
 
@@ -20,8 +20,8 @@ void PCRunLoopStart(void) {
     [NSApplication sharedApplication];
     [NSApp setActivationPolicy:NSApplicationActivationPolicyAccessory];
     
-    static PCPanel *shared = nil;
-    shared = [[PCPanel alloc] init];
+    static Panel *shared = nil;
+    shared = [[Panel alloc] init];
     [shared buildPanel];
     [shared registerForToggleNotification];
 }
@@ -56,7 +56,7 @@ void PCRunLoopStart(void) {
 - (void)buildPanel {
     NSRect frame = NSMakeRect(0, 0, 600, 600);
 
-    _panel = [[PCClickablePanel alloc] initWithContentRect:frame
+    _panel = [[ClickablePanel alloc] initWithContentRect:frame
     styleMask: NSWindowStyleMaskFullSizeContentView
     backing:NSBackingStoreBuffered
     defer:NO];
@@ -69,14 +69,14 @@ void PCRunLoopStart(void) {
     _panel.collectionBehavior = NSWindowCollectionBehaviorCanJoinAllSpaces | NSWindowCollectionBehaviorFullScreenAuxiliary;
     
     WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
-    _webView = [[PCClickableWebView  alloc] initWithFrame:frame configuration:config];
+    _webView = [[ClickableWebView  alloc] initWithFrame:frame configuration:config];
     _webView.underPageBackgroundColor = [NSColor clearColor];
     [_webView setValue:@NO forKey:@"windowOcclusionDetectionEnabled"];
     [_webView setValue:@NO forKey:@"drawsBackground"];
 
     [_panel setContentView:_webView];
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    NSURL *url = [bundle URLForResource:@"index" withExtension:@"html" subdirectory:@"ui"];
+    NSURL *url = [bundle URLForResource:@"index" withExtension:@"html" subdirectory:@"Bloom"];
     [_webView loadFileURL:url allowingReadAccessToURL:[url URLByDeletingLastPathComponent]];
 }
 
@@ -84,7 +84,7 @@ void PCRunLoopStart(void) {
     CFNotificationCenterAddObserver(
         CFNotificationCenterGetDarwinNotifyCenter(),
         (__bridge void *)self,
-        PCPanelToggleCallback,
+        PanelToggleCallback,
         CFSTR("com.jakejordan.purplecrayon.toggle"),
         NULL,
         CFNotificationSuspensionBehaviorDeliverImmediately

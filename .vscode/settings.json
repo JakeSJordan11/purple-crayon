@@ -7,21 +7,23 @@
     }
   ],
   "makefile.configureOnOpen": false,
-    "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "files.associations": {
-    "pc_run_loop_start.h": "c",
-    "pc_event_tap.h": "c",
-    "pc_run_loop.h": "c",
-    "PCClickablePanel.h": "objective-c",
-    "PCClickableWebView.h": "objective-c",
-    "PCPanel.h": "objective-c"
-  },
+    "event_tap_callback.h": "c",
+    "register_event_tap.h": "c",
+    "request_mach_port_rights.h": "c",
+    "run_loop_start.h": "c",
+    "run_loop.h": "c",
+    "ClickablePanel.h": "objective-c",
+    "ClickableWebView.h": "objective-c",
+    "Panel.h": "objective-c"
+  }
 }

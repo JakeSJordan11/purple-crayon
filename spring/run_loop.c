@@ -1,14 +1,15 @@
+#include <CoreFoundation/CoreFoundation.h>
 #include <CoreGraphics/CoreGraphics.h>
-#include "pc_run_loop_start.h"
-#include "pc_event_tap.h"
+#include "register_event_tap.h"
+#include "run_loop.h"
+#include "run_loop_start.h"
 
-int PCRunLoop()
+int RunLoop()
 {
-    CFMachPortRef tap = PCEventTap();
+    CFMachPortRef tap = register_event_tap();
     CFRunLoopSourceRef source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0);
     CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopCommonModes);
     CGEventTapEnable(tap, true);
-    printf("Listening for hotkey...\n");
-    PCRunLoopStart();
+    RunLoopStart();
     return 0;
 }

@@ -1,12 +1,12 @@
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 
-@interface PCPanel : NSObject
+@interface Panel : NSObject
 
 - (void)show;
 - (void)hide;
 - (void)toggle;
 - (void)registerForToggleNotification;
-void PCRunLoopStart(void);
+void RunLoopStart(void);
 
 @end

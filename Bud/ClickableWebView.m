@@ -1,6 +1,6 @@
-#import "PCClickableWebView.h"
+#import "ClickableWebView.h"
 
-@implementation PCClickableWebView
+@implementation ClickableWebView
 - (NSView *)hitTest:(NSPoint)point {
     return [super hitTest:point] ?: self;
 }
