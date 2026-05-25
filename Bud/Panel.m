@@ -7,10 +7,7 @@ static void PanelToggleCallback(CFNotificationCenterRef center, void *observer, 
     [panel toggle];
 }
 
-@implementation Panel {
-    NSPanel *_panel;
-    WKWebView *_webView;
-}
+@implementation Panel
 
 void RunLoopStart(void) {
     [NSApp run];
@@ -31,13 +28,13 @@ void RunLoopStart(void) {
         [self buildPanel];
     }
     NSPoint mouse = [NSEvent mouseLocation];
-    [_panel setFrameOrigin:NSMakePoint(mouse.x - 300, mouse.y - 300)];
-     _panel.alphaValue = 0;
-    [_panel orderFront:nil];
-    [_panel makeKeyWindow];
-    _panel.alphaValue = 1;
+    [self.panel setFrameOrigin:NSMakePoint(mouse.x - 300, mouse.y - 300)];
+     self.panel.alphaValue = 0;
+    [self.panel orderFront:nil];
+    [self.panel makeKeyWindow];
+    self.panel.alphaValue = 1;
 
-    [_panel makeFirstResponder:_webView];
+    [self.panel makeFirstResponder:_webView];
     [NSApp activateIgnoringOtherApps:YES];
 }
 
@@ -56,28 +53,28 @@ void RunLoopStart(void) {
 - (void)buildPanel {
     NSRect frame = NSMakeRect(0, 0, 600, 600);
 
-    _panel = [[ClickablePanel alloc] initWithContentRect:frame
+    self.panel = [[ClickablePanel alloc] initWithContentRect:frame
     styleMask: NSWindowStyleMaskFullSizeContentView
     backing:NSBackingStoreBuffered
     defer:NO];
     
-    _panel.floatingPanel = YES;
-    _panel.level = NSScreenSaverWindowLevel;
-    _panel.opaque = NO;
-    _panel.hasShadow = NO;
-    _panel.backgroundColor = [NSColor clearColor];
-    _panel.collectionBehavior = NSWindowCollectionBehaviorCanJoinAllSpaces | NSWindowCollectionBehaviorFullScreenAuxiliary;
+    self.panel.floatingPanel = YES;
+    self.panel.level = NSScreenSaverWindowLevel;
+    self.panel.opaque = NO;
+    self.panel.hasShadow = NO;
+    self.panel.backgroundColor = [NSColor clearColor];
+    self.panel.collectionBehavior = NSWindowCollectionBehaviorCanJoinAllSpaces | NSWindowCollectionBehaviorFullScreenAuxiliary;
     
     WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
-    _webView = [[ClickableWebView  alloc] initWithFrame:frame configuration:config];
-    _webView.underPageBackgroundColor = [NSColor clearColor];
-    [_webView setValue:@NO forKey:@"windowOcclusionDetectionEnabled"];
-    [_webView setValue:@NO forKey:@"drawsBackground"];
+    self.webView = [[ClickableWebView  alloc] initWithFrame:frame configuration:config];
+    self.webView.underPageBackgroundColor = [NSColor clearColor];
+    [self.webView setValue:@NO forKey:@"windowOcclusionDetectionEnabled"];
+    [self.webView setValue:@NO forKey:@"drawsBackground"];
 
-    [_panel setContentView:_webView];
+    [self.panel setContentView:_webView];
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSURL *url = [bundle URLForResource:@"index" withExtension:@"html" subdirectory:@"Bloom"];
-    [_webView loadFileURL:url allowingReadAccessToURL:[url URLByDeletingLastPathComponent]];
+    [self.webView loadFileURL:url allowingReadAccessToURL:[url URLByDeletingLastPathComponent]];
 }
 
 - (void)registerForToggleNotification {
