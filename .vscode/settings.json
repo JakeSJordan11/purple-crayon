@@ -10,6 +10,6 @@
   },
   "files.associations": {
     "*_*.h": "c",
-    ".h": "objective-c"
+    "*.h": "objective-c"
   }
 }
