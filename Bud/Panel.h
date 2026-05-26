@@ -1,9 +1,6 @@
-#import <Cocoa/Cocoa.h>
-#import <WebKit/WebKit.h>
+#import <Appkit/NSPanel.h>
 
 @interface Panel : NSPanel
-@property (strong, nonatomic) ClickablePanel *panel;
-@property (strong, nonatomic) WKWebView *webView;
 
 - (void)show;
 - (void)hide;
