@@ -47,7 +47,7 @@ void RunLoopStart(void) {
     [self makeKeyWindow];
     self.alphaValue = 1;
 
-    [self makeFirstResponder:_webView];
+    [self makeFirstResponder:self.webView];
     [NSApp activateIgnoringOtherApps:YES];
 }
 
