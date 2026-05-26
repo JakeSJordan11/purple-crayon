@@ -2,10 +2,12 @@
 #import "Panel.h"
 #import <WebKit/WKWebViewConfiguration.h>
 
+// this shouldn't be needed. Instead there should be a seperate component that handles the webview and the panel just places it as the view.
 @interface Panel ()
 @property (strong, nonatomic) WKWebView *webView;
 @end
 
+// this needs to be removed
 static void PanelToggleCallback(CFNotificationCenterRef center, void *observer, CFNotificationName name, const void *object, CFDictionaryRef userInfo) {
     Panel *panel = (__bridge Panel *)observer;
     [panel toggle];
@@ -13,13 +15,16 @@ static void PanelToggleCallback(CFNotificationCenterRef center, void *observer, 
 
 @implementation Panel
 - (BOOL)canBecomeKeyWindow { return YES; }
+// panels can't become main windows from what I have learned. so this is not doing anything. It was most likely from whne Panel was an NSObject, but it is now an NSPAnel.
 - (BOOL)canBecomeMainWindow { return NO; }
 - (BOOL)acceptsFirstMouse:(NSEvent *)event { return YES; }
 
+// this needs to be implamented better.
 void RunLoopStart(void) {
     [NSApp run];
 }
 
+// this needs to be removed. It is a hack and not good practice.
 + (void)load {
     [NSApplication sharedApplication];
     [NSApp setActivationPolicy:NSApplicationActivationPolicyAccessory];
@@ -30,6 +35,7 @@ void RunLoopStart(void) {
     [shared registerForToggleNotification];
 }
 
+// I shouldn't need a show and a hide method. I should just have a toggle.
 - (void)show {
     if (!self) {
         [self buildPanel];
@@ -58,6 +64,7 @@ void RunLoopStart(void) {
 }
 
 - (void)buildPanel {
+    // i should be building the panel at the mouse not moving it in show
     NSRect frame = NSMakeRect(0, 0, 600, 600);
 
     [self initWithContentRect:frame styleMask: NSWindowStyleMaskFullSizeContentView backing:NSBackingStoreBuffered defer:NO];
@@ -69,6 +76,7 @@ void RunLoopStart(void) {
     self.backgroundColor = [NSColor clearColor];
     self.collectionBehavior = NSWindowCollectionBehaviorCanJoinAllSpaces | NSWindowCollectionBehaviorFullScreenAuxiliary;
     
+    // this should all be done in the WebView in a seperate file whatever that ends up being. it should wet up the webview and then the panel just places it as the view here.
     WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
     self.webView = [[ClickableWebView  alloc] initWithFrame:frame configuration:config];
     self.webView.underPageBackgroundColor = [NSColor clearColor];
@@ -81,6 +89,7 @@ void RunLoopStart(void) {
     [self.webView loadFileURL:url allowingReadAccessToURL:[url URLByDeletingLastPathComponent]];
 }
 
+// this is a global system and is not safe to use. I need to find a way to not use this.0
 - (void)registerForToggleNotification {
     CFNotificationCenterAddObserver(
         CFNotificationCenterGetDarwinNotifyCenter(),
