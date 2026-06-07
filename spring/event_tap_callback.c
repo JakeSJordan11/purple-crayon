@@ -1,4 +1,8 @@
 #include "event_tap_callback.h"
+#include <CoreFoundation/CFMachPort.h>
+#include <CoreGraphics/CGEvent.h>
+#include <CoreGraphics/CGEventTypes.h>
+#include <CoreGraphics/CGRemoteOperation.h>
 
 CGEventRef event_tap_callback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon)
 {

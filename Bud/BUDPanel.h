@@ -1,6 +1,6 @@
 #import <Appkit/NSPanel.h>
 
-@interface Panel : NSPanel
+@interface BUDPanel : NSPanel
 
 - (void)show;
 - (void)hide;

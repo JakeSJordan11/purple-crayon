@@ -1,19 +1,24 @@
-#import "ClickableWebView.h"
-#import "Panel.h"
+#import "BUDPanel.h"
+#import "BUDWebView.h"
+#import <AppKit/NSEvent.h>
+#import <AppKit/NSApplication.h>
+#import <AppKit/NSColor.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSURL.h>
 #import <WebKit/WKWebViewConfiguration.h>
 
 // this shouldn't be needed. Instead there should be a seperate component that handles the webview and the panel just places it as the view.
-@interface Panel ()
+@interface BUDPanel ()
 @property (strong, nonatomic) WKWebView *webView;
 @end
 
 // this needs to be removed
 static void PanelToggleCallback(CFNotificationCenterRef center, void *observer, CFNotificationName name, const void *object, CFDictionaryRef userInfo) {
-    Panel *panel = (__bridge Panel *)observer;
+    BUDPanel *panel = (__bridge BUDPanel *)observer;
     [panel toggle];
 }
 
-@implementation Panel
+@implementation BUDPanel
 - (BOOL)canBecomeKeyWindow { return YES; }
 // panels can't become main windows from what I have learned. so this is not doing anything. It was most likely from whne Panel was an NSObject, but it is now an NSPAnel.
 - (BOOL)canBecomeMainWindow { return NO; }
@@ -29,8 +34,8 @@ void RunLoopStart(void) {
     [NSApplication sharedApplication];
     [NSApp setActivationPolicy:NSApplicationActivationPolicyAccessory];
     
-    static Panel *shared = nil;
-    shared = [[Panel alloc] init];
+    static BUDPanel *shared = nil;
+    shared = [[BUDPanel alloc] init];
     [shared buildPanel];
     [shared registerForToggleNotification];
 }
@@ -78,7 +83,7 @@ void RunLoopStart(void) {
     
     // this should all be done in the WebView in a seperate file whatever that ends up being. it should wet up the webview and then the panel just places it as the view here.
     WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
-    self.webView = [[ClickableWebView  alloc] initWithFrame:frame configuration:config];
+    self.webView = [[BUDWebView  alloc] initWithFrame:frame configuration:config];
     self.webView.underPageBackgroundColor = [NSColor clearColor];
     [self.webView setValue:@NO forKey:@"windowOcclusionDetectionEnabled"];
     [self.webView setValue:@NO forKey:@"drawsBackground"];

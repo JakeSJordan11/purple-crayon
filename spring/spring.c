@@ -1,6 +1,7 @@
 #include "spring.h"
-#include <CoreFoundation/CoreFoundation.h>
-#include <CoreGraphics/CoreGraphics.h>
+#include <CoreFoundation/CFMachPort.h>
+#include <CoreFoundation/CFRunLoop.h>
+#include <CoreGraphics/CGEvent.h>
 #include "register_event_tap.h"
 #include "run_loop_start.h"
 
