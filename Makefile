@@ -4,7 +4,7 @@ BUNDLE = $(APP).app
 build:
 	mkdir -p $(BUNDLE)/Contents/MacOS
 	clang -framework AppKit -framework WebKit -framework CoreGraphics -framework CoreFoundation \
-		-o $(BUNDLE)/Contents/MacOS/$(APP) main.c spring/event_tap_callback.c spring/register_event_tap.c spring/request_mach_port_rights.c spring/spring.c Bud/BUDWebView.m Bud/BUDPanel.m
+	-o $(BUNDLE)/Contents/MacOS/$(APP) main.c spring/register_event_tap.c spring/spring.c Bud/BUDPanel.m Bud/BUD.m
 	cp Info.plist $(BUNDLE)/Contents/Info.plist
 	cd Bloom && ./node_modules/.bin/esbuild app.jsx --bundle --outfile=../$(BUNDLE)/Contents/Resources/Bloom/out.js
 	cp Bloom/index.html $(BUNDLE)/Contents/Resources/Bloom/index.html
