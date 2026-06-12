@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "node esbuild.config.mjs"
+    "build": "node esbuild.mjs"
   },
   "devDependencies": {
     "esbuild": "0.28.0"

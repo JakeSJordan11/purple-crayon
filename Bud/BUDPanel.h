@@ -1,7 +1,8 @@
 #import <Appkit/NSPanel.h>
+#import <WebKit/WKScriptMessageHandler.h>
 #import <WebKit/WKWebView.h>
 
-@interface BUDPanel : NSPanel
+@interface BUDPanel : NSPanel <WKScriptMessageHandler>
 
 @property(strong, nonatomic) WKWebView *webView;
 
