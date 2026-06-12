@@ -5,11 +5,9 @@
 #include <CoreGraphics/CGEventTypes.h>
 
 CFMachPortRef register_event_tap(void);
-CGEventRef event_tap_callback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *efcon);
+CGEventRef event_tap_callback(CGEventTapProxy proxy, CGEventType type,
+                              CGEventRef event, void *efcon);
 
-enum KeyCode
-{
-    KEY_CODE_P = 35
-};
+enum KeyCode { KEY_CODE_P = 35 };
 
 #endif

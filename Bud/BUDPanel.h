@@ -3,7 +3,7 @@
 
 @interface BUDPanel : NSPanel
 
-@property (strong, nonatomic) WKWebView *webView;
+@property(strong, nonatomic) WKWebView *webView;
 
 - (void)BUDBuildPanel;
 - (void)BUDTogglePanel;

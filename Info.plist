@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-    <key>CFBundleIdentifier</key>
-    <string>com.jakejordan.purple-crayon</string>
-    <key>CFBundleName</key>
-    <string>Purple Crayon</string>
-    <key>LSApplicationCategoryType</key>
-    <string>public.app-category.productivity</string>
-    <key>NSPrincipalClass</key>
-    <string>NSApplication</string>
-    <key>NSMainNibFile</key>
-    <string></string>
-    <key>LSUIElement</key>
-    <true/>
-</dict>
+    <dict>
+        <key>CFBundleIdentifier</key>
+        <string>com.jakejordan.purple-crayon</string>
+        <key>CFBundleName</key>
+        <string>Purple Crayon</string>
+        <key>LSApplicationCategoryType</key>
+        <string>public.app-category.productivity</string>
+        <key>NSPrincipalClass</key>
+        <string>NSApplication</string>
+        <key>NSMainNibFile</key>
+        <string></string>
+        <key>LSUIElement</key>
+        <true />
+    </dict>
 </plist>

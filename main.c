@@ -1,9 +1,8 @@
-#include "spring/spring.h"
 #include "spring/initialize_bud.h"
+#include "spring/spring.h"
 
-int main()
-{
-    initialize_bud();
-    spring();
-    return 0;
+int main() {
+  initialize_bud();
+  spring();
+  return 0;
 }
