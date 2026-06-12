@@ -56,6 +56,11 @@ function App() {
             ((e.currentTarget.style.transform = "translateY(-10px)"),
               (e.currentTarget.style.transition = "all 0.5s ease"));
           }}
+          onClick={(event) => {
+            console.log(
+              "Clicked"
+            )
+          }}
         >
           Button
         </button>
