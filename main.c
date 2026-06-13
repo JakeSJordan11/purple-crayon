@@ -1,8 +1,8 @@
-#include <CoreFoundation/CoreFoundation.h>
-#include "pc_run_loop.h"
+#include "spring/initialize_bud.h"
+#include "spring/spring.h"
 
-int main(void)
-{
-    PCRunLoop();
-    return 0;
+int main() {
+  initialize_bud();
+  spring();
+  return 0;
 }
