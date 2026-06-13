@@ -3,6 +3,7 @@
 #import <AppKit/NSApplication.h>
 #import <AppKit/NSColor.h>
 #import <AppKit/NSEvent.h>
+#include <CoreGraphics/CGRemoteOperation.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSURL.h>
 #import <WebKit/WKScriptMessage.h>
@@ -19,7 +20,7 @@ void initialize_bud(void) {
   [panel BUDBuildPanel];
 }
 
-void toggle_bud(void) { [panel BUDTogglePanel]; }
+void toggle_bud() { [panel BUDTogglePanel]; }
 
 @implementation BUDPanel
 
@@ -41,13 +42,9 @@ void toggle_bud(void) { [panel BUDTogglePanel]; }
   self.backgroundColor = [NSColor clearColor];
   self.hidesOnDeactivate = NO;
   self.collectionBehavior = NSWindowCollectionBehaviorCanJoinAllSpaces;
-  // self.ignoresMouseEvents = YES;
 
-  // 1. Create the communication bridge controller
   WKUserContentController *contentController =
       [[WKUserContentController alloc] init];
-
-  // Register the exact string name your React app calls
   [contentController addScriptMessageHandler:self name:@"buttonClicked"];
   WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
   config.userContentController = contentController;
@@ -82,15 +79,22 @@ void toggle_bud(void) { [panel BUDTogglePanel]; }
 
 #pragma mark - WKScriptMessageHandler
 
-// 6. WebKit drops messages here whenever JavaScript fires .postMessage()
+extern void inject_hardware_key(CGKeyCode keyCode);
+
 - (void)userContentController:(WKUserContentController *)userContentController
       didReceiveScriptMessage:(WKScriptMessage *)message {
 
   if ([message.name isEqualToString:@"buttonClicked"]) {
-    // message.body holds whatever data React passed down (string, number,
-    // dictionary)
-    NSLog(@"[SUCCESS] Event captured from React! Message payload: %@",
-          message.body);
+
+    if ([message.body isKindOfClass:[NSNumber class]]) {
+      CGKeyCode keyCode = [message.body unsignedShortValue];
+
+      [self BUDTogglePanel];
+
+      [[NSApplication sharedApplication] hide:nil];
+
+      inject_hardware_key(keyCode);
+    }
   }
 }
 

@@ -27,8 +27,23 @@ CGEventRef event_tap_callback(CGEventTapProxy proxy, CGEventType type,
       (flags & kCGEventFlagMaskAlternate) &&
       (flags & kCGEventFlagMaskControl)) {
     toggle_bud();
-    return NULL;
+    return event;
   }
 
   return event;
+}
+
+void inject_hardware_key(CGKeyCode keyCode) {
+  CGEventRef keyDown = CGEventCreateKeyboardEvent(NULL, keyCode, true);
+  CGEventRef keyUp = CGEventCreateKeyboardEvent(NULL, keyCode, false);
+
+  if (keyDown && keyUp) {
+    CGEventPost(kCGHIDEventTap, keyDown);
+    CGEventPost(kCGHIDEventTap, keyUp);
+  }
+
+  if (keyDown)
+    CFRelease(keyDown);
+  if (keyUp)
+    CFRelease(keyUp);
 }
