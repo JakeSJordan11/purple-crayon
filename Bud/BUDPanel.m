@@ -3,7 +3,7 @@
 #import <AppKit/NSApplication.h>
 #import <AppKit/NSColor.h>
 #import <AppKit/NSEvent.h>
-#include <CoreGraphics/CGRemoteOperation.h>
+#import <CoreGraphics/CGRemoteOperation.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSURL.h>
 #import <WebKit/WKScriptMessage.h>
@@ -80,20 +80,50 @@ void toggle_bud() { [panel BUDTogglePanel]; }
 #pragma mark - WKScriptMessageHandler
 
 extern void inject_hardware_key(CGKeyCode keyCode);
+extern void inject_hardware_key_with_modifiers(CGKeyCode keyCode,
+                                               CGEventFlags modifiers);
 
 - (void)userContentController:(WKUserContentController *)userContentController
       didReceiveScriptMessage:(WKScriptMessage *)message {
 
   if ([message.name isEqualToString:@"buttonClicked"]) {
+    if ([message.body isKindOfClass:[NSDictionary class]]) {
+      NSDictionary *body = message.body;
+      NSNumber *keyCode = body[@"keyCode"];
+      NSString *modifiers = body[@"modifiers"];
 
-    if ([message.body isKindOfClass:[NSNumber class]]) {
-      CGKeyCode keyCode = [message.body unsignedShortValue];
+      if (keyCode) {
+        CGKeyCode keyCodeValue = [keyCode unsignedShortValue];
 
-      [self BUDTogglePanel];
+        if (modifiers && modifiers.length > 0) {
+          // Handle modifiers - split the comma-separated string
+          CGEventFlags flags = 0;
+          NSArray *modifierArray = [modifiers componentsSeparatedByString:@","];
 
-      [[NSApplication sharedApplication] hide:nil];
+          for (NSString *modifier in modifierArray) {
+            NSString *trimmedModifier = [modifier
+                stringByTrimmingCharactersInSet:
+                    [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            if ([trimmedModifier isEqualToString:@"Cmd"]) {
+              flags |= kCGEventFlagMaskCommand;
+            } else if ([trimmedModifier isEqualToString:@"Shift"]) {
+              flags |= kCGEventFlagMaskShift;
+            } else if ([trimmedModifier isEqualToString:@"Ctrl"]) {
+              flags |= kCGEventFlagMaskControl;
+            } else if ([trimmedModifier isEqualToString:@"Alt"]) {
+              flags |= kCGEventFlagMaskAlternate;
+            }
+          }
 
-      inject_hardware_key(keyCode);
+          inject_hardware_key_with_modifiers(keyCodeValue, flags);
+        } else {
+          // No modifiers
+          inject_hardware_key(keyCodeValue);
+        }
+
+        [self BUDTogglePanel];
+        [[NSApplication sharedApplication] hide:nil];
+      }
     }
   }
 }

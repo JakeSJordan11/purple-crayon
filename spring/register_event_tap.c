@@ -47,3 +47,21 @@ void inject_hardware_key(CGKeyCode keyCode) {
   if (keyUp)
     CFRelease(keyUp);
 }
+
+void inject_hardware_key_with_modifiers(CGKeyCode keyCode,
+                                        CGEventFlags modifiers) {
+  CGEventRef keyDown = CGEventCreateKeyboardEvent(NULL, keyCode, true);
+  CGEventRef keyUp = CGEventCreateKeyboardEvent(NULL, keyCode, false);
+
+  if (keyDown && keyUp) {
+    CGEventSetFlags(keyDown, modifiers);
+    CGEventSetFlags(keyUp, modifiers);
+    CGEventPost(kCGHIDEventTap, keyDown);
+    CGEventPost(kCGHIDEventTap, keyUp);
+  }
+
+  if (keyDown)
+    CFRelease(keyDown);
+  if (keyUp)
+    CFRelease(keyUp);
+}
