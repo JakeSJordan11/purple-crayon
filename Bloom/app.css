@@ -1,25 +1,70 @@
-main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
 button {
-  padding: 10px;
-  margin: 20px;
-  background-color: white;
-  border-radius: 25%;
-  border-style: solid;
-  border-width: 4px;
-  border-color: silver;
-  font-size: 2.2rem;
+  background-color: #4a5568;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  position: absolute;
   outline-style: none;
+  border: none;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: grid;
+  place-content: center;
+  animation: bloom 0.2s ease-out both;
+
+  &:hover {
+    background-color: #303e54;
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    outline-style: solid;
+    outline-color: #1c2257;
+    outline-width: 2px;
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.workspace {
+    font-size: 14px;
+    height: 100px;
+    width: 100px;
+    top: calc(50% - 50px);
+    left: calc(50% - 50px);
+  }
+
+  &.user {
+    height: 50px;
+    width: 50px;
+    top: calc(50% - 25px);
+    left: calc(50% - 25px);
+  }
+
+  &.slot {
+    background-color: transparent;
+    outline-style: solid;
+    outline-color: white;
+    outline-width: 2px;
+    height: 50px;
+    width: 50px;
+    top: calc(50% - 25px);
+    left: calc(50% - 25px);
+  }
 }
 
-button:active {
-  background-color: black;
-  border-color: white;
-  border-style: solid;
-  border-width: 4px;
+@keyframes bloom {
+  from {
+    scale: 0%;
+    background-color: black;
+    transform: translate(0%, 0%);
+  }
+  to {
+    scale: 100%;
+  }
+}
+
+body {
+  user-select: none;
+  margin: 0;
+  overflow: hidden;
 }
