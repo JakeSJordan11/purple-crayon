@@ -22,20 +22,27 @@ CGEventRef event_tap_callback(CGEventTapProxy proxy, CGEventType type,
       (CGKeyCode)CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
   CGEventFlags flags = CGEventGetFlags(event);
 
-  if (type == kCGEventKeyDown && keyCode == KEY_CODE_P &&
+  if (type == kCGEventKeyDown && keyCode == 35 &&
       (flags & kCGEventFlagMaskCommand) &&
       (flags & kCGEventFlagMaskAlternate) &&
       (flags & kCGEventFlagMaskControl)) {
     toggle_bud();
+    return NULL;
+  }
+  if (type == kCGEventKeyDown && keyCode == 53) {
+    close_bud();
     return event;
   }
-
   return event;
 }
 
 void inject_hardware_key(CGKeyCode keyCode) {
   CGEventRef keyDown = CGEventCreateKeyboardEvent(NULL, keyCode, true);
   CGEventRef keyUp = CGEventCreateKeyboardEvent(NULL, keyCode, false);
+
+  // if (keyCode == 58) {
+  //   CGEventPost(kCGHIDEventTap, keyDown);
+  // }
 
   if (keyDown && keyUp) {
     CGEventPost(kCGHIDEventTap, keyDown);
@@ -64,4 +71,8 @@ void inject_hardware_key_with_modifiers(CGKeyCode keyCode,
     CFRelease(keyDown);
   if (keyUp)
     CFRelease(keyUp);
+}
+
+void inject_hardware_modifier_key(CGKeyCode keyCode, bool keyDownValue) {
+  CGEventRef keyDown = CGEventCreateKeyboardEvent(NULL, keyCode, keyDownValue);
 }

@@ -3,30 +3,64 @@ import * as ReactDOM from "react-dom/client";
 import { AiOutlineSwitcher } from "react-icons/ai";
 import {
   FaArrowsAlt,
+  FaBackspace,
+  FaCross,
+  FaFill,
+  FaFillDrip,
   FaPaintBrush,
   FaPenNib,
   FaRedoAlt,
   FaUndoAlt,
 } from "react-icons/fa";
-import { LuLassoSelect } from "react-icons/lu";
+import { LuCircleX, LuCommand, LuLassoSelect, LuOption } from "react-icons/lu";
 import "./app.css";
 
 function App() {
-  function handleMouseDown(button, modifiers = "") {
+  const [EditMode, setEditMode] = React.useState(false);
+  const [AcitveWorkspace, setActiveWorkspace] = React.useState("Photoshop");
+
+  function handleMouseDown(button, modifiers) {
     if (!window.webkit.messageHandlers.buttonClicked) return;
 
     window.webkit.messageHandlers.buttonClicked.postMessage({
       keyCode: button,
-      modifiers: modifiers, // String with comma-separated modifiers like "Cmd,Shift"
+      modifiers: modifiers,
     });
   }
 
-  const Workspace = "Photoshop"; // TODO: change to actual workspace name from the system
-
   return (
     <>
-      <button className="workspace" onMouseDown={null}>
-        {Workspace}
+      {EditMode ? (
+        <menu className="tabbar">
+          <button
+            className="tab"
+            onMouseDown={() => {
+              (setActiveWorkspace("Ableton Live"), setEditMode(!EditMode));
+            }}
+          >
+            Ableton Live
+          </button>
+          <button
+            className="tab"
+            onMouseDown={() => {
+              (setActiveWorkspace("Photoshop"), setEditMode(!EditMode));
+            }}
+          >
+            Photoshop
+          </button>
+          <button
+            className="tab"
+            onMouseDown={() => setActiveWorkspace("User")}
+          >
+            +
+          </button>
+        </menu>
+      ) : null}
+      <button
+        className="activeWorkspace"
+        onMouseDown={() => setTimeout(() => setEditMode(!EditMode), 200)}
+      >
+        {EditMode ? "Edit" : AcitveWorkspace}
       </button>
       <button
         title="pen"
@@ -64,7 +98,7 @@ function App() {
         title="undo"
         className="user"
         style={{ transform: "translate(75px, 75px)" }}
-        onMouseDown={() => handleMouseDown(6, "Cmd")}
+        onMouseDown={() => handleMouseDown(6, "Command")}
       >
         <FaUndoAlt />
       </button>
@@ -72,7 +106,7 @@ function App() {
         title="redo"
         className="user"
         style={{ transform: "translate(-75px, -75px)" }}
-        onMouseDown={() => handleMouseDown(6, "Cmd, Shift")}
+        onMouseDown={() => handleMouseDown(6, "Command, Shift")}
       >
         <FaRedoAlt />
       </button>
@@ -85,10 +119,47 @@ function App() {
         <AiOutlineSwitcher />
       </button>
       <button
-        className="slot"
+        title="backspace"
+        className="user"
         style={{ transform: "translate(-75px, 75px)" }}
-      />
+        onMouseDown={() => handleMouseDown(51)}
+      >
+        <FaBackspace />
+      </button>
+      <button
+        title="fill"
+        className="user"
+        style={{ transform: "translate(0px, -175px)" }}
+        onMouseDown={() => handleMouseDown(51, "Alternate")}
+      >
+        <FaFill />
+      </button>
+      <button
+        title="fill"
+        className="user"
+        style={{ transform: "translateY(175px)" }}
+        onMouseDown={() => handleMouseDown(51, "Command")}
+      >
+        <FaFillDrip />
+      </button>
+      <button
+        title="alternate"
+        className="user"
+        style={{ transform: "translateX(175px)" }}
+        onMouseDown={() => handleMouseDown(58)}
+      >
+        <LuOption />
+      </button>
+      <button
+        title="command"
+        className="user"
+        style={{ transform: "translateX(-175px)" }}
+        onMouseDown={() => handleMouseDown(55)}
+      >
+        <LuCommand />
+      </button>
     </>
   );
 }
+
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);

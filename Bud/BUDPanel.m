@@ -21,6 +21,7 @@ void initialize_bud(void) {
 }
 
 void toggle_bud() { [panel BUDTogglePanel]; }
+void close_bud() { [panel BUDClosePanel]; }
 
 @implementation BUDPanel
 
@@ -29,7 +30,7 @@ void toggle_bud() { [panel BUDTogglePanel]; }
 }
 
 - (void)BUDBuildPanel {
-  NSRect frame = NSMakeRect(0, 0, 600, 600);
+  NSRect frame = NSMakeRect(0, 0, 500, 500);
   [self initWithContentRect:frame
                   styleMask:NSWindowStyleMaskFullSizeContentView |
                             NSWindowStyleMaskNonactivatingPanel
@@ -64,7 +65,7 @@ void toggle_bud() { [panel BUDTogglePanel]; }
 - (void)BUDTogglePanel {
   if (![self isVisible]) {
     NSPoint mouse = [NSEvent mouseLocation];
-    [self setFrameOrigin:NSMakePoint(mouse.x - 300, mouse.y - 300)];
+    [self setFrameOrigin:NSMakePoint(mouse.x - 250, mouse.y - 250)];
     self.alphaValue = 0;
     [self orderFront:nil];
     [self makeKeyWindow];
@@ -74,7 +75,13 @@ void toggle_bud() { [panel BUDTogglePanel]; }
     [NSApp run];
     return;
   }
-  [self orderOut:nil];
+  [panel BUDClosePanel];
+}
+
+- (void)BUDClosePanel {
+  if ([self isVisible]) {
+    [self orderOut:nil];
+  }
 }
 
 #pragma mark - WKScriptMessageHandler
@@ -82,6 +89,7 @@ void toggle_bud() { [panel BUDTogglePanel]; }
 extern void inject_hardware_key(CGKeyCode keyCode);
 extern void inject_hardware_key_with_modifiers(CGKeyCode keyCode,
                                                CGEventFlags modifiers);
+extern void inject_hardware_modifier_key(CGKeyCode, bool);
 
 - (void)userContentController:(WKUserContentController *)userContentController
       didReceiveScriptMessage:(WKScriptMessage *)message {
@@ -91,12 +99,13 @@ extern void inject_hardware_key_with_modifiers(CGKeyCode keyCode,
       NSDictionary *body = message.body;
       NSNumber *keyCode = body[@"keyCode"];
       NSString *modifiers = body[@"modifiers"];
+      // NSString *keyDown = body[@"keyDown"];
+      // NSString *keyUp = body[@"keyUp"];
 
       if (keyCode) {
         CGKeyCode keyCodeValue = [keyCode unsignedShortValue];
 
         if (modifiers && modifiers.length > 0) {
-          // Handle modifiers - split the comma-separated string
           CGEventFlags flags = 0;
           NSArray *modifierArray = [modifiers componentsSeparatedByString:@","];
 
@@ -104,23 +113,28 @@ extern void inject_hardware_key_with_modifiers(CGKeyCode keyCode,
             NSString *trimmedModifier = [modifier
                 stringByTrimmingCharactersInSet:
                     [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            if ([trimmedModifier isEqualToString:@"Cmd"]) {
+            if ([trimmedModifier isEqualToString:@"Command"]) {
               flags |= kCGEventFlagMaskCommand;
             } else if ([trimmedModifier isEqualToString:@"Shift"]) {
               flags |= kCGEventFlagMaskShift;
-            } else if ([trimmedModifier isEqualToString:@"Ctrl"]) {
+            } else if ([trimmedModifier isEqualToString:@"Control"]) {
               flags |= kCGEventFlagMaskControl;
-            } else if ([trimmedModifier isEqualToString:@"Alt"]) {
+            } else if ([trimmedModifier isEqualToString:@"Alternate"]) {
               flags |= kCGEventFlagMaskAlternate;
             }
           }
 
           inject_hardware_key_with_modifiers(keyCodeValue, flags);
-        } else {
-          // No modifiers
+        }
+        // if (keyDown) {
+        //   inject_hardware_modifier_key(keyCodeValue, true);
+        // }
+        // if (keyUp) {
+        //   inject_hardware_modifier_key(keyCodeValue, false);
+        // }
+        else {
           inject_hardware_key(keyCodeValue);
         }
-
         [self BUDTogglePanel];
         [[NSApplication sharedApplication] hide:nil];
       }

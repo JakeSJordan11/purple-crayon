@@ -6,5 +6,6 @@
 
 void initialize_bud(void);
 void toggle_bud(void);
+void close_bud(void);
 
 #endif

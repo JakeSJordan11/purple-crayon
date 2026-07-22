@@ -1,4 +1,6 @@
-button {
+.activeWorkspace {
+  -webkit-user-select: none;
+  user-select: none;
   background-color: #4a5568;
   color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -6,65 +8,125 @@ button {
   outline-style: none;
   border: none;
   border-radius: 50%;
-  transition: all 0.2s ease;
   display: grid;
   place-content: center;
-  animation: bloom 0.2s ease-out both;
+  animation: bloom 0.2s ease none normal;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  height: 100px;
+  width: 100px;
+  top: calc(50% - 50px);
+  left: calc(50% - 50px);
+}
 
-  &:hover {
-    background-color: #303e54;
-    transform: scale(1.1);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-    outline-style: solid;
-    outline-color: #1c2257;
-    outline-width: 2px;
-    outline-offset: 2px;
-  }
+.activeWorkspace:hover {
+  background-color: #303e54;
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  outline-style: solid;
+  outline-color: #1c2257;
+  outline-width: 2px;
+  outline-offset: 2px;
+}
 
-  &:active {
-    transform: scale(0.95);
-  }
+.user {
+  -webkit-user-select: none;
+  user-select: none;
+  background-color: #4a5568;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  outline-style: none;
+  border: none;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  animation: bloom 0.2s ease none normal;
+  transition: all 0.2s ease;
+  height: 50px;
+  width: 50px;
+  top: calc(50% - 25px);
+  left: calc(50% - 25px);
+}
 
-  &.workspace {
-    font-size: 14px;
-    height: 100px;
-    width: 100px;
-    top: calc(50% - 50px);
-    left: calc(50% - 50px);
-  }
+.user:hover {
+  -webkit-user-select: none;
+  user-select: none;
+  background-color: #4a5568;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  outline-style: none;
+  border: none;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  animation: bloom 0.2s ease none normal;
+  transition: all 0.2s ease;
+  background-color: #303e54;
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  outline-style: solid;
+  outline-color: #1c2257;
+  outline-width: 2px;
+  outline-offset: 2px;
+}
 
-  &.user {
-    height: 50px;
-    width: 50px;
-    top: calc(50% - 25px);
-    left: calc(50% - 25px);
-  }
+.slot {
+  background-color: transparent;
+  outline-style: solid;
+  outline-color: white;
+  outline-width: 2px;
+  height: 50px;
+  width: 50px;
+  top: calc(50% - 25px);
+  left: calc(50% - 25px);
+}
 
-  &.slot {
-    background-color: transparent;
-    outline-style: solid;
-    outline-color: white;
-    outline-width: 2px;
-    height: 50px;
-    width: 50px;
-    top: calc(50% - 25px);
-    left: calc(50% - 25px);
-  }
+.slot:hover {
+  background-color: #303e54;
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  outline-style: solid;
+  outline-color: #1c2257;
+  outline-width: 2px;
+  outline-offset: 2px;
+}
+
+.tab {
+  -webkit-user-select: none;
+  user-select: none;
+  background-color: #4a5568;
+  color: white;
+  border-style: none;
+  border-radius: 25px;
+  transition: all 0.2s ease;
+  font-size: small;
+}
+
+.tab:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  outline-style: none;
+  border: none;
+  background-color: #303e54;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  outline-style: solid;
+  outline-color: #1c2257;
+  outline-width: 2px;
+  outline-offset: 2px;
+}
+
+.tabbar {
+  display: grid;
+  grid-auto-flow: column;
+  column-gap: 8px;
 }
 
 @keyframes bloom {
   from {
-    scale: 0%;
-    background-color: black;
-    transform: translate(0%, 0%);
+    scale: 0;
   }
   to {
-    scale: 100%;
+    scale: 1;
   }
-}
-
-body {
-  user-select: none;
-  margin: 0;
-  overflow: hidden;
 }

@@ -8,5 +8,6 @@
 
 - (void)BUDBuildPanel;
 - (void)BUDTogglePanel;
+- (void)BUDClosePanel;
 
 @end
