@@ -1,163 +1,115 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import { AiOutlineSwitcher } from "react-icons/ai";
-import {
-  FaArrowsAlt,
-  FaBackspace,
-  FaCross,
-  FaFill,
-  FaFillDrip,
-  FaPaintBrush,
-  FaPenNib,
-  FaRedoAlt,
-  FaUndoAlt,
-} from "react-icons/fa";
-import { LuCircleX, LuCommand, LuLassoSelect, LuOption } from "react-icons/lu";
+import { workspaces } from "./workspaces";
 import "./app.css";
 
+const HOLD_MS = 400;
+
+// action is "down" or "up" for held keys; omitted for a normal press
+function send(keyCode, modifiers, action) {
+  window.webkit?.messageHandlers?.buttonClicked?.postMessage({
+    keyCode,
+    modifiers,
+    action,
+  });
+}
+
+function StickyButton({ button, active, onToggle }) {
+  const { title, icon: Icon, x = 0, y = 0 } = button;
+  const timer = React.useRef(null);
+  const cancel = () => clearTimeout(timer.current);
+
+  return (
+    <button
+      title={title}
+      className={active ? "user active" : "user"}
+      style={{ transform: `translate(${x}px, ${y}px)` }}
+      onContextMenu={(e) => e.preventDefault()}
+      onPointerDown={() => {
+        if (active) return onToggle(button); // tap while on: release
+        timer.current = setTimeout(() => onToggle(button), HOLD_MS); // hold while off: lock
+      }}
+      onPointerUp={cancel}
+      onPointerLeave={cancel}
+      onPointerCancel={cancel}
+    >
+      <Icon />
+    </button>
+  );
+}
+
+function Workspace({ buttons, heldKeys, toggleModifier }) {
+  return buttons.map((button) => {
+    if (button.modifier) {
+      return (
+        <StickyButton
+          key={button.title}
+          button={button}
+          active={heldKeys.includes(button.keyCode)}
+          onToggle={toggleModifier}
+        />
+      );
+    }
+
+    const { title, icon: Icon, x = 0, y = 0, keyCode, modifiers } = button;
+    return (
+      <button
+        key={title}
+        title={title}
+        className="user"
+        style={{ transform: `translate(${x}px, ${y}px)` }}
+        onMouseDown={() => send(keyCode, modifiers)}
+      >
+        <Icon />
+      </button>
+    );
+  });
+}
+
 function App() {
-  const [EditMode, setEditMode] = React.useState(false);
-  const [AcitveWorkspace, setActiveWorkspace] = React.useState("Photoshop");
+  const [editMode, setEditMode] = React.useState(false);
+  const [activeWorkspace, setActiveWorkspace] = React.useState("Photoshop");
+  const [heldKeys, setHeldKeys] = React.useState([]);
 
-  function handleMouseDown(button, modifiers) {
-    if (!window.webkit.messageHandlers.buttonClicked) return;
-
-    window.webkit.messageHandlers.buttonClicked.postMessage({
-      keyCode: button,
-      modifiers: modifiers,
-    });
+  function toggleModifier({ keyCode }) {
+    const turnOn = !heldKeys.includes(keyCode);
+    setHeldKeys(
+      turnOn ? [...heldKeys, keyCode] : heldKeys.filter((k) => k !== keyCode),
+    );
+    send(keyCode, undefined, turnOn ? "down" : "up");
   }
 
   return (
     <>
-      {EditMode ? (
+      {editMode && (
         <menu className="tabbar">
-          <button
-            className="tab"
-            onMouseDown={() => {
-              (setActiveWorkspace("Ableton Live"), setEditMode(!EditMode));
-            }}
-          >
-            Ableton Live
-          </button>
-          <button
-            className="tab"
-            onMouseDown={() => {
-              (setActiveWorkspace("Photoshop"), setEditMode(!EditMode));
-            }}
-          >
-            Photoshop
-          </button>
-          <button
-            className="tab"
-            onMouseDown={() => setActiveWorkspace("User")}
-          >
-            +
-          </button>
+          {Object.keys(workspaces).map((name) => (
+            <button
+              key={name}
+              className="tab"
+              onMouseDown={() => {
+                setActiveWorkspace(name);
+                setEditMode(false);
+              }}
+            >
+              {name}
+            </button>
+          ))}
         </menu>
-      ) : null}
+      )}
+
       <button
         className="activeWorkspace"
-        onMouseDown={() => setTimeout(() => setEditMode(!EditMode), 200)}
+        onMouseDown={() => setTimeout(() => setEditMode(!editMode), 200)}
       >
-        {EditMode ? "Edit" : AcitveWorkspace}
+        {editMode ? "Edit" : activeWorkspace}
       </button>
-      <button
-        title="pen"
-        className="user"
-        style={{ transform: "translateX(100px)" }}
-        onMouseDown={() => handleMouseDown(35)}
-      >
-        <FaPenNib />
-      </button>
-      <button
-        title="brush"
-        className="user"
-        style={{ transform: "translateX(-100px)" }}
-        onMouseDown={() => handleMouseDown(11)}
-      >
-        <FaPaintBrush />
-      </button>
-      <button
-        title="lasso"
-        className="user"
-        style={{ transform: "translateY(100px)" }}
-        onMouseDown={() => handleMouseDown(37)}
-      >
-        <LuLassoSelect />
-      </button>
-      <button
-        title="move"
-        className="user"
-        style={{ transform: "translateY(-100px)" }}
-        onMouseDown={() => handleMouseDown(9)}
-      >
-        <FaArrowsAlt />
-      </button>
-      <button
-        title="undo"
-        className="user"
-        style={{ transform: "translate(75px, 75px)" }}
-        onMouseDown={() => handleMouseDown(6, "Command")}
-      >
-        <FaUndoAlt />
-      </button>
-      <button
-        title="redo"
-        className="user"
-        style={{ transform: "translate(-75px, -75px)" }}
-        onMouseDown={() => handleMouseDown(6, "Command, Shift")}
-      >
-        <FaRedoAlt />
-      </button>
-      <button
-        title="switch"
-        className="user"
-        style={{ transform: "translate(75px, -75px)" }}
-        onMouseDown={() => handleMouseDown(7)}
-      >
-        <AiOutlineSwitcher />
-      </button>
-      <button
-        title="backspace"
-        className="user"
-        style={{ transform: "translate(-75px, 75px)" }}
-        onMouseDown={() => handleMouseDown(51)}
-      >
-        <FaBackspace />
-      </button>
-      <button
-        title="fill"
-        className="user"
-        style={{ transform: "translate(0px, -175px)" }}
-        onMouseDown={() => handleMouseDown(51, "Alternate")}
-      >
-        <FaFill />
-      </button>
-      <button
-        title="fill"
-        className="user"
-        style={{ transform: "translateY(175px)" }}
-        onMouseDown={() => handleMouseDown(51, "Command")}
-      >
-        <FaFillDrip />
-      </button>
-      <button
-        title="alternate"
-        className="user"
-        style={{ transform: "translateX(175px)" }}
-        onMouseDown={() => handleMouseDown(58)}
-      >
-        <LuOption />
-      </button>
-      <button
-        title="command"
-        className="user"
-        style={{ transform: "translateX(-175px)" }}
-        onMouseDown={() => handleMouseDown(55)}
-      >
-        <LuCommand />
-      </button>
+
+      <Workspace
+        buttons={workspaces[activeWorkspace]}
+        heldKeys={heldKeys}
+        toggleModifier={toggleModifier}
+      />
     </>
   );
 }
